@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #f3ffca;
+  --color-primary-dim: #beee00;
+  --color-primary-container: #cafd00;
+  --color-primary-fixed: #cafd00;
+  --color-primary-fixed-dim: #beee00;
+  --color-on-primary: #516700;
+  --color-on-primary-fixed: #3a4a00;
+  --color-on-primary-fixed-variant: #526900;
+  --color-on-primary-container: #4a5e00;
+  --color-inverse-primary: #516700;
+
+  --color-secondary: #9d8fff;
+  --color-secondary-dim: #9d8fff;
+  --color-secondary-container: #4532a6;
+  --color-secondary-fixed: #d3cbff;
+  --color-secondary-fixed-dim: #c5bcff;
+  --color-on-secondary: #1d0071;
+  --color-on-secondary-fixed: #311993;
+  --color-on-secondary-fixed-variant: #4f3db0;
+  --color-on-secondary-container: #d2caff;
+
+  --color-tertiary: #f9f9f9;
+  --color-tertiary-dim: #ebebeb;
+  --color-tertiary-container: #ebebeb;
+  --color-tertiary-fixed: #ffffff;
+  --color-tertiary-fixed-dim: #f0f1f1;
+  --color-on-tertiary: #5e5f60;
+  --color-on-tertiary-fixed: #4f5051;
+  --color-on-tertiary-fixed-variant: #6c6d6e;
+  --color-on-tertiary-container: #555757;
+
+  --color-background: #0e0e0e;
+  --color-on-background: #ffffff;
+  --color-surface: #0e0e0e;
+  --color-on-surface: #ffffff;
+  --color-on-surface-variant: #ababab;
+  --color-surface-variant: #262626;
+  --color-surface-dim: #0e0e0e;
+  --color-surface-bright: #2c2c2c;
+  --color-surface-tint: #f3ffca;
+  --color-surface-container: #191919;
+  --color-surface-container-low: #131313;
+  --color-surface-container-lowest: #000000;
+  --color-surface-container-high: #1f1f1f;
+  --color-surface-container-highest: #262626;
+
+  --color-outline: #757575;
+  --color-outline-variant: #484848;
+
+  --color-error: #ff6e84;
+  --color-error-dim: #d73357;
+  --color-error-container: #a70138;
+  --color-on-error: #490013;
+  --color-on-error-container: #ffb2b9;
+
+  --color-inverse-surface: #f9f9f9;
+  --color-inverse-on-surface: #555555;
+
+  --font-headline: "Unbounded", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Unbounded", sans-serif;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-radius: 0px !important;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
+  }
+}
