@@ -1,35 +1,93 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import ActionButton from "../components/ActionButton";
 
 export default function Result() {
   const navigate = useNavigate();
+  const { generatedImageUrl, isGenerating, statusText, generate, reset } =
+    useApp();
+
+  useEffect(() => {
+    if (!isGenerating && !generatedImageUrl) {
+      generate();
+    }
+  }, []);
+
+  function handleRegenerate() {
+    reset();
+    navigate("/");
+  }
+
+  function handleDownload() {
+    if (!generatedImageUrl) return;
+    const a = document.createElement("a");
+    a.href = generatedImageUrl;
+    a.download = `news-hero-${Date.now()}.png`;
+    a.click();
+  }
+
+  if (isGenerating) {
+    return (
+      <main className="h-[100dvh] flex items-center justify-center p-6">
+        <div className="flex flex-col items-center gap-8">
+          <div className="relative w-24 h-24" style={{ borderRadius: 0 }}>
+            <div className="absolute inset-0 border-4 border-on-background" style={{ borderRadius: 0 }} />
+            <div className="absolute inset-0 border-4 border-primary border-t-transparent animate-spin" style={{ borderRadius: '50%' }} />
+          </div>
+          <div className="text-center">
+            <p className="font-headline font-black text-2xl text-primary uppercase tracking-tight">
+              {statusText || "ГЕНЕРАЦИЯ..."}
+            </p>
+            <p className="font-body text-on-surface-variant mt-2 text-sm">
+              Создаём новостной шедевр с вашим героем
+            </p>
+          </div>
+
+          <div className="w-full max-w-xs h-1 bg-surface-container-highest border border-outline-variant overflow-hidden">
+            <div className="h-full bg-primary-container animate-pulse w-2/3" />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!generatedImageUrl) {
+    return (
+      <main className="h-[100dvh] flex items-center justify-center p-6">
+        <div className="text-center flex flex-col gap-6">
+          <span className="material-symbols-outlined text-6xl text-error">
+            error
+          </span>
+          <p className="font-headline font-bold text-xl text-error uppercase">
+            {statusText || "ОШИБКА ГЕНЕРАЦИИ"}
+          </p>
+          <ActionButton variant="secondary" icon="arrow_back" onClick={handleRegenerate}>
+            НАЗАД
+          </ActionButton>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-6">
+    <main className="h-[100dvh] flex items-center justify-center p-4 md:p-6 overflow-y-auto">
       <div className="max-w-5xl mx-auto w-full py-8 md:py-12 flex flex-col gap-8 items-center">
         <div className="w-full relative">
           <div className="border-4 border-primary p-2 bg-surface-container-lowest shadow-[8px_8px_0px_0px_rgba(202,253,0,1)]">
             <img
-              alt="Cyberpunk aesthetic high-voltage digital art, vibrant acid lime and neon purple glitch effects"
+              alt="Сгенерированное новостное изображение с вашим героем"
               className="w-full h-auto object-cover border-2 border-primary-dim"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUiatOmi4q4z0EaDL40I0Kn84rpGNWUEjaqb3CCxhxQxDbDCF9tXRftLdpjbXkXlyDn-reITGof98aMPlvHttLySW2R9vM95V19uryd4TTgHUi0zdKT7tc__Pia3WM_a2LWr0E9x6WkyrtFl1zuStkBvIa2qt5YmX3SCFD5bcdFFT656uUgZ2owjJbm8McV6HPFrMo93vqhmxgilD5ssfEwqVEKzQ0yrEAJ5nScmA1OagHXsAwpkx3JXfFBchfWFri8M0m5Fla3Qk"
+              src={generatedImageUrl}
             />
           </div>
         </div>
 
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <ActionButton
-            variant="primary"
-            icon="download"
-            onClick={() => {}}
-          >
+          <ActionButton variant="primary" icon="download" onClick={handleDownload}>
             СКАЧАТЬ
           </ActionButton>
-          <ActionButton
-            variant="secondary"
-            icon="refresh"
-            onClick={() => navigate("/")}
-          >
+          <ActionButton variant="secondary" icon="refresh" onClick={handleRegenerate}>
             СГЕНЕРИРОВАТЬ СНОВА
           </ActionButton>
         </div>

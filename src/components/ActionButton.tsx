@@ -7,6 +7,7 @@ interface ActionButtonProps {
   children: ReactNode;
   icon?: IconName;
   fullWidth?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
@@ -22,18 +23,21 @@ export default function ActionButton({
   children,
   icon,
   fullWidth = true,
+  disabled = false,
   onClick,
 }: ActionButtonProps) {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={`
         font-headline font-black text-xl md:text-2xl uppercase tracking-tighter
         py-6 px-8 md:py-8 md:px-12
-        transition-all cursor-pointer
+        transition-all
         flex items-center justify-center gap-3 md:gap-4
         ${fullWidth ? "w-full" : "min-w-[320px]"}
-        ${variantClasses[variant]}
+        ${disabled ? "opacity-30 cursor-not-allowed grayscale" : "cursor-pointer"}
+        ${!disabled ? variantClasses[variant] : variantClasses[variant]}
       `}
     >
       {children}

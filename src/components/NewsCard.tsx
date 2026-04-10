@@ -3,7 +3,7 @@ import type { NewsItem } from "../types";
 interface NewsCardProps {
   item: NewsItem;
   isSelected: boolean;
-  onSelect: (id: string) => void;
+  onToggle: (item: NewsItem) => void;
 }
 
 const borderColors: Record<string, string> = {
@@ -24,7 +24,7 @@ const imageBgColors: Record<string, string> = {
   default: "bg-surface-variant",
 };
 
-export default function NewsCard({ item, isSelected, onSelect }: NewsCardProps) {
+export default function NewsCard({ item, isSelected, onToggle }: NewsCardProps) {
   const colorKey = item.categoryColor;
   const border = isSelected ? borderColors[colorKey] : "border-outline-variant";
   const tag = tagColors[colorKey];
@@ -32,14 +32,26 @@ export default function NewsCard({ item, isSelected, onSelect }: NewsCardProps) 
 
   return (
     <div
-      onClick={() => onSelect(item.id)}
+      onClick={() => onToggle(item)}
       className={`
         flex items-center gap-4 md:gap-6 p-4 md:p-6
         border-2 bg-surface-container-low
         hover:border-secondary transition-colors group cursor-pointer
+        relative
         ${border}
       `}
     >
+      {isSelected && (
+        <div className="absolute top-2 right-2 md:top-3 md:right-3">
+          <span
+            className="material-symbols-outlined text-primary text-xl md:text-2xl"
+            style={{ fontVariationSettings: "'FILL' 1" }}
+          >
+            check_circle
+          </span>
+        </div>
+      )}
+
       <div
         className={`w-16 h-16 md:w-24 md:h-24 shrink-0 border-2 border-on-background overflow-hidden ${imgBg}`}
       >
