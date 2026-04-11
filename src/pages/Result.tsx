@@ -31,9 +31,9 @@ export default function Result() {
     return (
       <main className="h-[100dvh] flex items-center justify-center p-6">
         <div className="flex flex-col items-center gap-8">
-          <div className="relative w-24 h-24" style={{ borderRadius: 0 }}>
-            <div className="absolute inset-0 border-4 border-on-background" style={{ borderRadius: 0 }} />
-            <div className="absolute inset-0 border-4 border-primary border-t-transparent animate-spin" style={{ borderRadius: '50%' }} />
+          <div className="relative w-24 h-24">
+            <div className="absolute inset-0 border-4 border-on-background" />
+            <div className="absolute inset-0 border-[4px] border-transparent border-t-primary animate-square-spin" />
           </div>
           <div className="text-center">
             <p className="font-headline font-black text-2xl text-primary uppercase tracking-tight">
