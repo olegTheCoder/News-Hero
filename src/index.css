@@ -98,6 +98,7 @@
   }
 
   .animate-square-spin {
-    animation: square-spin 1s linear infinite;
+    animation: square-spin 1.5s linear infinite;
+    inset: 0;
   }
 }

@@ -33,7 +33,16 @@ export default function Result() {
         <div className="flex flex-col items-center gap-8">
           <div className="relative w-24 h-24">
             <div className="absolute inset-0 border-4 border-on-background" />
-            <div className="absolute inset-0 border-[4px] border-transparent border-t-primary animate-square-spin" />
+            <div className="absolute inset-0 animate-square-spin">
+              <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-primary" />
+              <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-primary" />
+              <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-primary" />
+              <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-primary" />
+              <div className="absolute top-0 left-6 right-6 h-[4px] bg-primary" />
+              <div className="absolute bottom-0 left-6 right-6 h-[4px] bg-primary" />
+              <div className="absolute left-0 top-6 bottom-6 w-[4px] bg-primary" />
+              <div className="absolute right-0 top-6 bottom-6 w-[4px] bg-primary" />
+            </div>
           </div>
           <div className="text-center">
             <p className="font-headline font-black text-2xl text-primary uppercase tracking-tight">
