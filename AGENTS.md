@@ -14,4 +14,5 @@
 - TailwindCSS v4
 - React Router
 - Capacitor (для Android)
-- HF BLIP → Pollinations.ai для генерации изображений
+- HF BLIP → SiliconFlow API для генерации изображений
+- НИКОГДА не использовать pollinations.ai для проксирования картинок — использовать Referer заголовок

@@ -6,10 +6,15 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      "/api/hf": {
-        target: "https://api-inference.huggingface.co",
+      "/rss-proxy": {
+        target: "https://api.allorigins.win",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/hf/, ""),
+        rewrite: (path) => path.replace(/^\/rss-proxy/, "/raw?url="),
+      },
+      "/sf-image": {
+        target: "https://s3.amazonaws.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/sf-image\//, ""),
       },
     },
   },
