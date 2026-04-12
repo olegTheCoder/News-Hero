@@ -27,3 +27,9 @@ dist-ssr
 # App specific
 opencode.json
 screens/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
