@@ -3,16 +3,33 @@ import { useApp } from "../context/AppContext";
 import UploadZone from "../components/UploadZone";
 import NewsCard from "../components/NewsCard";
 import ActionButton from "../components/ActionButton";
-import { newsItems } from "../data/news";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { uploadedFile, selectedNews, toggleNews } = useApp();
+  const { uploadedFile, selectedNewsIds, toggleNews, newsItems, isLoadingNews, generate } = useApp();
 
-  const canGenerate = !!uploadedFile && selectedNews.length > 0;
+  const canGenerate = !!uploadedFile && selectedNewsIds.length > 0;
 
-  function handleGenerate() {
-    if (canGenerate) navigate("/result");
+  async function handleGenerate() {
+    if (canGenerate) {
+      navigate("/result");
+      await generate();
+    }
+  }
+
+  if (isLoadingNews) {
+    return (
+      <main className="h-[100dvh] flex flex-col overflow-y-auto">
+        <div className="pt-8 md:pt-12 pb-32 md:pb-20 px-4 max-w-4xl mx-auto w-full flex flex-col gap-8 md:gap-12 flex-1 items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-primary animate-pulse" />
+            <p className="font-headline font-bold text-primary uppercase tracking-tight">
+              Загружаем новости...
+            </p>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -25,24 +42,36 @@ export default function Dashboard() {
             <span className="material-symbols-outlined text-xl hidden md:inline">
               bolt
             </span>
-            ТОП НОВОСТИ ДЛЯ ГЕНЕРАЦИИ
+            ТОП НОВОСТИ ДНЯ
           </h2>
 
           <p className="font-body text-on-surface-variant text-xs md:text-sm">
-            Выберите новости — они определят сюжет для вашего героя
+            Выберите новости (одну или несколько) — они станут сюжетом для вашего героя
           </p>
 
-          <div className="flex flex-col gap-3 md:gap-4">
-            {newsItems.map((item) => (
-              <NewsCard
-                key={item.id}
-                item={item}
-                isSelected={selectedNews.some((n) => n.id === item.id)}
-                onToggle={toggleNews}
-              />
-            ))}
-          </div>
+          {newsItems.length === 0 ? (
+            <p className="font-body text-on-surface-variant text-sm py-8 text-center">
+              Не удалось загрузить новости. Проверьте подключение к интернету.
+            </p>
+          ) : (
+            <div className="flex flex-col gap-3 md:gap-4">
+              {newsItems.map((item) => (
+                <NewsCard
+                  key={item.id}
+                  item={item}
+                  isSelected={selectedNewsIds.includes(item.id)}
+                  onSelect={toggleNews}
+                />
+              ))}
+            </div>
+          )}
         </section>
+
+        {selectedNewsIds.length > 0 && (
+          <div className="hidden md:block text-sm text-on-surface-variant">
+            Выбрано новостей: {selectedNewsIds.length}
+          </div>
+        )}
 
         <div className="hidden md:flex justify-center w-full mt-4">
           <ActionButton

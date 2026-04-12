@@ -1,18 +1,10 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import ActionButton from "../components/ActionButton";
 
 export default function Result() {
   const navigate = useNavigate();
-  const { generatedImageUrl, isGenerating, statusText, generate, reset } =
-    useApp();
-
-  useEffect(() => {
-    if (!isGenerating && !generatedImageUrl) {
-      generate();
-    }
-  }, []);
+  const { generatedImageUrl, isGenerating, statusText, reset } = useApp();
 
   function handleRegenerate() {
     reset();

@@ -16,6 +16,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/sf-image\//, ""),
       },
+      "/bfl-image": {
+        target: "https://delivery",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/bfl-image/, ""),
+      },
     },
   },
 });

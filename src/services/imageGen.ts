@@ -11,7 +11,7 @@ export async function generateImage(
 
   try {
     const payload: Record<string, unknown> = {
-      model: "black-forest-labs/FLUX.1-Kontext-pro",
+      model: "black-forest-labs/FLUX.1-schnell",
       prompt: words,
       image_size: `${width}x${height}`,
     };
@@ -45,14 +45,14 @@ export async function generateImage(
 
     console.log("Image URL from API:", imageUrl);
 
-    const imgRes = await fetch(imageUrl, {
-      headers: {
-        Referer: "https://pollinations.ai",
-      },
-    });
-    if (!imgRes.ok) throw new Error(`Failed to fetch image: ${imgRes.status}`);
-    const blob = await imgRes.blob();
-    return URL.createObjectURL(blob);
+    if (imageUrl.includes("delivery.")) {
+      const path = imageUrl.replace("https://delivery", "");
+      return "/bfl-image" + path;
+    } else if (imageUrl.includes("s3.amazonaws.com")) {
+      return imageUrl;
+    }
+
+    return imageUrl;
   } catch (e) {
     console.log("Generation error:", e);
   }
