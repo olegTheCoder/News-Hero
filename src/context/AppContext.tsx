@@ -3,15 +3,15 @@ import type { NewsItem } from "../types";
 import { fetchLatestNews, categorizeNews, type RssItem } from "../services/newsFetcher";
 
 interface AppState {
-  uploadedFile: File | null;
-  uploadedPreview: string | null;
   selectedNewsIds: string[];
   generatedImageUrl: string | null;
   isGenerating: boolean;
   statusText: string;
   newsItems: NewsItem[];
   isLoadingNews: boolean;
-  setUploadedFile: (f: File | null) => void;
+  uploadedFile: File | null;
+  uploadedPreview: string | null;
+  setUploadedFile: (file: File | null) => void;
   toggleNews: (id: string) => void;
   generate: () => Promise<void>;
   reset: () => void;
@@ -59,14 +59,27 @@ function getTimeAgo(pubDate: string): string {
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [uploadedFile, setUploadedFileRaw] = useState<File | null>(null);
-  const [uploadedPreview, setUploadedPreview] = useState<string | null>(null);
   const [selectedNewsIds, setSelectedNewsIds] = useState<string[]>([]);
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [isLoadingNews, setIsLoadingNews] = useState(true);
+  const [uploadedFile, setUploadedFileState] = useState<File | null>(null);
+  const [uploadedPreview, setUploadedPreview] = useState<string | null>(null);
+
+  const setUploadedFile = useCallback((file: File | null) => {
+    setUploadedFileState(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setUploadedPreview(null);
+    }
+  }, []);
 
   useEffect(() => {
     async function loadNews() {
@@ -83,17 +96,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     loadNews();
   }, []);
 
-  function setUploadedFile(f: File | null) {
-    if (uploadedPreview) URL.revokeObjectURL(uploadedPreview);
-    if (f) {
-      setUploadedFileRaw(f);
-      setUploadedPreview(URL.createObjectURL(f));
-    } else {
-      setUploadedFileRaw(null);
-      setUploadedPreview(null);
-    }
-  }
-
   const toggleNews = useCallback((id: string) => {
     setSelectedNewsIds((prev) => {
       if (prev.includes(id)) {
@@ -105,10 +107,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function generate() {
-    if (!uploadedFile || selectedNewsIds.length === 0) return;
+    if (selectedNewsIds.length === 0) return;
 
     const selectedItems = newsItems.filter((item) => selectedNewsIds.includes(item.id));
-    if (selectedItems.length === 0) return;
 
     setIsGenerating(true);
     setGeneratedImageUrl(null);
@@ -119,18 +120,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const { buildPrompt } = await import("../services/promptBuilder");
       const { generateImage } = await import("../services/imageGen");
 
-      const prompt = buildPrompt("", selectedItems);
+      const prompt = buildPrompt(selectedItems);
 
       setStatusText("Генерируем изображение...");
-      const imageUrl = uploadedFile ? URL.createObjectURL(uploadedFile) : undefined;
-      const url = await generateImage(prompt, new AbortController().signal, 512, 512, imageUrl);
+      const result = await generateImage(prompt, new AbortController().signal, 512, 512);
 
-      if (!url) {
+      if (!result?.imageUrl) {
         throw new Error("Не удалось сгенерировать изображение");
       }
 
-      setGeneratedImageUrl(url);
-      setStatusText("Готово!");
+      setGeneratedImageUrl(result.imageUrl);
+      setStatusText(`Готово! (модель: ${result.model})`);
     } catch (e) {
       setStatusText(`Ошибка: ${(e as Error).message}`);
     } finally {
@@ -139,24 +139,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   function reset() {
-    setUploadedFile(null);
     setSelectedNewsIds([]);
     setGeneratedImageUrl(null);
     setIsGenerating(false);
     setStatusText("");
+    setUploadedFileState(null);
+    setUploadedPreview(null);
   }
 
   return (
     <AppContext.Provider
       value={{
-        uploadedFile,
-        uploadedPreview,
         selectedNewsIds,
         generatedImageUrl,
         isGenerating,
         statusText,
         newsItems,
         isLoadingNews,
+        uploadedFile,
+        uploadedPreview,
         setUploadedFile,
         toggleNews,
         generate,

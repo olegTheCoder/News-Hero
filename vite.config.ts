@@ -21,6 +21,14 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/bfl-image/, ""),
       },
+      "/hf-api": {
+        target: "https://api-inference.huggingface.co",
+        changeOrigin: true,
+      },
+      "/gen-api": {
+        target: "https://api.gen-api.ru",
+        changeOrigin: true,
+      },
     },
   },
 });

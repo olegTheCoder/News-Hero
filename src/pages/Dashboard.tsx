@@ -1,14 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import UploadZone from "../components/UploadZone";
 import NewsCard from "../components/NewsCard";
 import ActionButton from "../components/ActionButton";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { uploadedFile, selectedNewsIds, toggleNews, newsItems, isLoadingNews, generate } = useApp();
+  const { selectedNewsIds, toggleNews, newsItems, isLoadingNews, generate } = useApp();
 
-  const canGenerate = !!uploadedFile && selectedNewsIds.length > 0;
+  const canGenerate = selectedNewsIds.length > 0;
 
   async function handleGenerate() {
     if (canGenerate) {
@@ -35,18 +34,16 @@ export default function Dashboard() {
   return (
     <main className="h-[100dvh] flex flex-col overflow-y-auto">
       <div className="pt-8 md:pt-12 pb-32 md:pb-20 px-4 max-w-4xl mx-auto w-full flex flex-col gap-8 md:gap-12 flex-1">
-        <UploadZone />
-
         <section className="flex flex-col gap-4">
           <h2 className="font-headline font-black text-lg md:text-xl text-secondary uppercase tracking-tighter leading-none flex items-center gap-2">
             <span className="material-symbols-outlined text-xl hidden md:inline">
               bolt
             </span>
-            ТОП НОВОСТИ ДНЯ
+            ВЫБЕРИТЕ НОВОСТИ
           </h2>
 
           <p className="font-body text-on-surface-variant text-xs md:text-sm">
-            Выберите новости (одну или несколько) — они станут сюжетом для вашего героя
+            Выберите новости (одну или несколько) — они станут сюжетом для карикатуры
           </p>
 
           {newsItems.length === 0 ? (
@@ -81,7 +78,7 @@ export default function Dashboard() {
             onClick={handleGenerate}
             disabled={!canGenerate}
           >
-            НАЧАТЬ ГЕНЕРАЦИЮ
+            СОЗДАТЬ КАРИКАТУРУ
           </ActionButton>
         </div>
       </div>
@@ -93,7 +90,7 @@ export default function Dashboard() {
           onClick={handleGenerate}
           disabled={!canGenerate}
         >
-          НАЧАТЬ ГЕНЕРАЦИЮ
+          СОЗДАТЬ КАРИКАТУРУ
         </ActionButton>
       </div>
     </main>

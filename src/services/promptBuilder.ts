@@ -1,28 +1,57 @@
 import type { NewsItem } from "../types";
 
-const SCENE_KEYWORDS: Record<string, string> = {
-  "ЖЕЛЕЗО": "high-tech laboratory, quantum computer, server room",
-  "БЕЗОПАСНОСТЬ": "cybersecurity command center, digital fortress",
-  "ПО": "modern office, tech startup workspace",
-  "ИНФРА": "data center, network hub",
-  "УПРАВЛЕНИЕ": "government building, political summit, conference hall",
-  "СПОРТ": "sports arena, stadium, tennis court",
-  "ВОЙНА": "military base, defense position",
-};
-
 export function buildPrompt(
-  _imageDescription: string,
   newsItems: NewsItem[]
 ): string {
-  const newsText = newsItems.map((n) => n.title).join(". ");
+  if (newsItems.length === 0) {
+    return "Create a conceptual editorial magazine cover inspired by The Economist";
+  }
 
-  const scenes = newsItems
-    .slice(0, 2)
-    .map((n) => SCENE_KEYWORDS[n.category] || "breaking news environment")
-    .join(" and ");
+  const newsDetails = newsItems.map((n) => {
+    let detail = `- ${n.title}`;
+    if (n.category) detail += ` (${n.category})`;
+    return detail;
+  }).join("\n");
 
-  return `Same person from uploaded photo as main character. ${newsText}. ` +
-    `Background: ${scenes}. ` +
-    `Professional news photo, realistic style, high quality, ` +
-    `keep the person's face and features unchanged`;
+  return `Create a conceptual editorial magazine cover inspired by The Economist: bold, minimal, symbolic, geopolitical, economic, witty, and visually intelligent.
+
+The cover must illustrate these specific news stories:
+${newsDetails}
+
+IMPORTANT: The visual concept must directly reflect the actual news content above. Each chosen headline must be represented through specific visual metaphors in the artwork.
+
+For example:
+- If news is about Trump tariff war → show symbolic trade war elements
+- If news is about tech/AI → show relevant technology symbols
+- If news is about economy → show financial/economic symbols
+- If news is about Russia/Ukraine → show relevant geopolitical symbols
+- If news is about climate → show environmental symbols
+
+Create a striking visual metaphor where central figure represents the main character embodying the news narrative. The figure should be interacting with symbolic elements that represent the specific headlines.
+
+Style requirements:
+- Economist-like cover design language
+- clean editorial composition
+- smart visual metaphor (NOT literal illustration)
+- dramatic but restrained
+- highly polished, print-magazine quality
+- professional portrait / business style
+
+Composition:
+- vertical magazine cover format
+- centered protagonist figure
+- strong silhouette
+- top masthead zone (leave clear space for headline text)
+- red border frame
+- minimal background
+- striking symbolic objects clearly representing the chosen news
+
+Technical requirements:
+- high detail, sharp focus
+- proper lighting and depth of field
+- magazine print quality
+- NO TEXT inside the image (leave space for masthead)
+
+Negative prompt:
+extra characters, weak composition, bad anatomy, childish illustration, noisy background, comedic meme aesthetic, generic corporate stock look, fantasy costume, low-resolution details, text artifacts, watermarks`;
 }

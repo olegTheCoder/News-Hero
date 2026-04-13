@@ -1,86 +1,52 @@
-const SF_TOKEN = "sk-glxioukowaqnjvpawnnzokjysabktxdbokhjiwqirstqqret";
+const WORKER_URL = "https://news-hero-image.olegthecoder89.workers.dev";
 
 export async function generateImage(
   prompt: string,
   _signal: AbortSignal,
-  width = 512,
-  height = 512,
-  originalImageUrl?: string
-): Promise<string> {
-  const words = prompt.split(" ").slice(0, 50).join(" ");
+  width = 1024,
+  height = 1024
+): Promise<{ imageUrl: string; model: string }> {
+  const words = prompt.split(" ").slice(0, 100).join(" ");
+
+  console.log("Worker: Starting request with prompt:", words.slice(0, 50));
 
   try {
-    const payload: Record<string, unknown> = {
-      model: "black-forest-labs/FLUX.1-schnell",
-      prompt: words,
-      image_size: `${width}x${height}`,
-    };
+    const res = await fetch(
+      WORKER_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: words,
+          width,
+          height,
+        }),
+      }
+    );
 
-    if (originalImageUrl) {
-      payload.image_url = originalImageUrl;
-    }
-
-    const res = await fetch("https://api.siliconflow.com/v1/images/generations", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${SF_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-      const err = await res.text();
-      console.log("SiliconFlow error:", res.status, err);
-      throw new Error(`API error: ${res.status}`);
-    }
+    console.log("Worker: Response status:", res.status);
 
     const data = await res.json();
-    console.log("SiliconFlow response:", data);
-    let imageUrl = data.images?.[0]?.url;
-    if (!imageUrl) {
-      console.log("No image URL in response:", data);
-      throw new Error("No image URL");
+    console.log("Worker response:", data);
+
+    if (data.success && data.imageBase64) {
+      console.log("Worker: Success! Base64 image, model:", data.model);
+      return { 
+        imageUrl: `data:image/png;base64,${data.imageBase64}`,
+        model: data.model 
+      };
     }
 
-    console.log("Image URL from API:", imageUrl);
-
-    if (imageUrl.includes("delivery.")) {
-      const path = imageUrl.replace("https://delivery", "");
-      return "/bfl-image" + path;
-    } else if (imageUrl.includes("s3.amazonaws.com")) {
-      return imageUrl;
+    if (data.error) {
+      console.log("Worker error:", data.error);
+      throw new Error(data.error);
     }
-
-    return imageUrl;
   } catch (e) {
-    console.log("Generation error:", e);
+    console.log("Worker exception:", e);
+    throw e;
   }
 
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Canvas not supported");
-
-  const hues = [230, 260, 180, 300];
-  const hue = hues[Math.floor(Math.random() * hues.length)];
-  ctx.fillStyle = `hsl(${hue}, 60%, 15%)`;
-  ctx.fillRect(0, 0, width, height);
-
-  ctx.fillStyle = `hsl(${hue}, 70%, 60%)`;
-  ctx.beginPath();
-  ctx.arc(width / 2, height / 2, 100, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = `hsl(${hue}, 80%, 80%)`;
-  ctx.font = "bold 20px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText(words.substring(0, 15), width / 2, height / 2 + 60);
-
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "12px Arial";
-  ctx.fillText("News Hero", width / 2, height - 15);
-
-  return canvas.toDataURL("image/png");
+  throw new Error("Не удалось сгенерировать изображение");
 }
