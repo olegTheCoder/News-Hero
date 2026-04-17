@@ -1,6 +1,3 @@
 name = "news-hero-image"
 main = "worker.js"
 compatibility_date = "2025-04-12"
-
-[env.production]
-routes = [{ pattern = "ai.newshero.app", zone_name = "newshero.app" }]

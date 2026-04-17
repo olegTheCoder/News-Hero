@@ -38,6 +38,7 @@ function rssToNewsItem(rssItem: RssItem): NewsItem {
     categoryColor,
     time: timeAgo,
     title: rssItem.title,
+    description: rssItem.description,
     image: rssItem.image || "",
     imageAlt: rssItem.title,
   };
@@ -120,10 +121,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const { buildPrompt } = await import("../services/promptBuilder");
       const { generateImage } = await import("../services/imageGen");
 
-      const prompt = buildPrompt(selectedItems);
+      const prompt = await buildPrompt(selectedItems);
 
       setStatusText("Генерируем изображение...");
-      const result = await generateImage(prompt, new AbortController().signal, 512, 512);
+      const result = await generateImage(prompt, new AbortController().signal);
 
       if (!result?.imageUrl) {
         throw new Error("Не удалось сгенерировать изображение");
