@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
 import Dashboard from "./pages/Dashboard";
 import Result from "./pages/Result";
@@ -6,12 +6,12 @@ import Result from "./pages/Result";
 export default function App() {
   return (
     <AppProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/result" element={<Result />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AppProvider>
   );
 }
