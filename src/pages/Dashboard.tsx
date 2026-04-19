@@ -35,15 +35,24 @@ export default function Dashboard() {
     <main className="h-[100dvh] flex flex-col overflow-y-auto">
       <div className="pt-8 md:pt-12 pb-32 md:pb-20 px-4 max-w-4xl mx-auto w-full flex flex-col gap-8 md:gap-12 flex-1">
         <section className="flex flex-col gap-4">
+          <div className="bg-[#E60000] px-4 py-3 -mx-4">
+            <h1 className="font-serif font-bold text-white text-xl md:text-2xl tracking-wide text-center">
+              The Economist
+            </h1>
+            <p className="font-serif text-white/80 text-xs md:text-sm text-center mt-1 tracking-widest uppercase">
+              cover generator
+            </p>
+          </div>
+
           <h2 className="font-headline font-black text-lg md:text-xl text-secondary uppercase tracking-tighter leading-none flex items-center gap-2">
             <span className="material-symbols-outlined text-xl hidden md:inline">
               bolt
             </span>
-            ВЫБЕРИТЕ НОВОСТИ
+            ВЫБЕРИТЕ НОВОСТЬ
           </h2>
 
           <p className="font-body text-on-surface-variant text-xs md:text-sm">
-            Выберите новости (одну или несколько) — они станут сюжетом для карикатуры
+            Выберите одну новость — она станет сюжетом для обложки
           </p>
 
           {newsItems.length === 0 ? (
@@ -64,12 +73,6 @@ export default function Dashboard() {
           )}
         </section>
 
-        {selectedNewsIds.length > 0 && (
-          <div className="hidden md:block text-sm text-on-surface-variant">
-            Выбрано новостей: {selectedNewsIds.length}
-          </div>
-        )}
-
         <div className="hidden md:flex justify-center w-full mt-4">
           <ActionButton
             variant="primary"
@@ -78,7 +81,7 @@ export default function Dashboard() {
             onClick={handleGenerate}
             disabled={!canGenerate}
           >
-            СОЗДАТЬ КАРИКАТУРУ
+            СОЗДАТЬ ОБЛОЖКУ
           </ActionButton>
         </div>
       </div>
@@ -90,7 +93,7 @@ export default function Dashboard() {
           onClick={handleGenerate}
           disabled={!canGenerate}
         >
-          СОЗДАТЬ КАРИКАТУРУ
+          СОЗДАТЬ ОБЛОЖКУ
         </ActionButton>
       </div>
     </main>

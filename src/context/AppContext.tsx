@@ -86,7 +86,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     async function loadNews() {
       try {
         const rssItems = await fetchLatestNews();
-        const news = rssItems.map(rssToNewsItem);
+        const news = rssItems.map(rssToNewsItem).filter((item) => item.image);
         setNewsItems(news);
       } catch (error) {
         console.error("Error loading news:", error);
@@ -101,9 +101,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setSelectedNewsIds((prev) => {
       if (prev.includes(id)) {
         return prev.filter((i) => i !== id);
-      } else {
-        return [...prev, id];
       }
+      return [id];
     });
   }, []);
 

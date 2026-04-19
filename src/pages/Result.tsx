@@ -21,8 +21,8 @@ export default function Result() {
 
   if (isGenerating) {
     return (
-      <main className="h-[100dvh] flex items-center justify-center p-6">
-        <div className="flex flex-col items-center gap-8">
+      <main className="h-[100dvh] flex items-center justify-center p-4 md:p-6 overflow-y-auto">
+        <div className="max-w-5xl mx-auto w-full py-8 md:py-12 flex flex-col gap-8 items-center">
           <div className="relative w-24 h-24">
             <div className="absolute inset-0 border-4 border-on-background" />
             <div className="absolute inset-0 animate-square-spin">
@@ -41,12 +41,12 @@ export default function Result() {
               {statusText || "ГЕНЕРАЦИЯ..."}
             </p>
             <p className="font-body text-on-surface-variant mt-2 text-sm">
-              Создаём карикатуру по новостям
+              Создаём обложку по новостям
             </p>
           </div>
 
           <div className="w-full max-w-lg border-4 border-primary p-2 bg-surface-container-lowest shadow-[8px_8px_0px_0px_rgba(202,253,0,1)]">
-            <div className="w-full aspect-square bg-surface-container-highest animate-pulse" />
+            <div className="w-full aspect-square bg-surface-container-highest animate-pulse" style={{ maxHeight: "60vh" }} />
           </div>
         </div>
       </main>
