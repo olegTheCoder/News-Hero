@@ -86,7 +86,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 w-full p-4 bg-background z-40 border-t-2 border-outline-variant md:hidden">
+      <div className="fixed bottom-0 left-0 w-full p-3 bg-background z-40 border-t-2 border-outline-variant md:hidden">
         <ActionButton
           variant="primary"
           icon="bolt"

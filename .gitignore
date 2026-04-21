@@ -27,3 +27,4 @@ dist-ssr
 # App specific
 opencode.json
 screens/
+.vercel

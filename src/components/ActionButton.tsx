@@ -31,11 +31,11 @@ export default function ActionButton({
       onClick={onClick}
       disabled={disabled}
       className={`
-        font-headline font-black text-xl md:text-2xl uppercase tracking-tighter
-        py-6 px-8 md:py-8 md:px-12
+        font-headline font-black text-base md:text-2xl uppercase tracking-tighter
+        py-3 px-5 md:py-8 md:px-12
         transition-all
-        flex items-center justify-center gap-3 md:gap-4
-        ${fullWidth ? "w-full" : "min-w-[320px]"}
+        flex items-center justify-center gap-2 md:gap-4
+        ${fullWidth ? "w-full" : "min-w-[200px] md:min-w-[320px]"}
         ${disabled ? "opacity-30 cursor-not-allowed grayscale" : "cursor-pointer"}
         ${!disabled ? variantClasses[variant] : variantClasses[variant]}
       `}
@@ -43,7 +43,7 @@ export default function ActionButton({
       {children}
       {icon && (
         <span
-          className="material-symbols-outlined text-3xl md:text-4xl"
+          className="material-symbols-outlined text-xl md:text-4xl"
           style={{ fontVariationSettings: "'FILL' 1" }}
         >
           {icon}

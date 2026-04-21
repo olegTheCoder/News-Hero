@@ -78,9 +78,9 @@ export default function UploadZone() {
         onClick={() => inputRef.current?.click()}
         className={`
           group relative cursor-pointer border-4 border-dashed border-secondary
-          p-8 md:p-12 bg-surface-container-high
+          p-5 md:p-12 bg-surface-container-high
           transition-all hover:bg-surface-container-highest
-          flex flex-col items-center justify-center gap-4 md:gap-6
+          flex flex-col items-center justify-center gap-3 md:gap-6
           overflow-hidden
           ${isDragOver ? "bg-surface-container-highest border-primary" : ""}
         `}
@@ -89,7 +89,7 @@ export default function UploadZone() {
 
         <div className="relative z-10 p-4 md:p-6 bg-secondary text-on-secondary border-2 border-on-background shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
           <span
-            className="material-symbols-outlined text-4xl md:text-5xl"
+            className="material-symbols-outlined text-2xl md:text-5xl"
             style={{ fontVariationSettings: "'FILL' 1" }}
           >
             add_photo_alternate

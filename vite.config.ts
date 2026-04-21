@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  base: "/News-Hero/",
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
